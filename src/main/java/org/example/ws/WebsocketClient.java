@@ -1,5 +1,6 @@
 package org.example.ws;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.*;
@@ -173,7 +174,7 @@ public class WebsocketClient extends WebSocketListener {
      * @param socket the socket to send the JSON message through
      * @param payload the object to serialise into the JSON string
      */
-    @SneakyThrows
+    @SneakyThrows(JsonProcessingException.class)
     private static void sendPayloadAsJson(WebSocket socket, WebsocketPayload payload) {
         var stringPayload = objectMapper.writeValueAsString(payload);
         socket.send(stringPayload);
@@ -191,7 +192,7 @@ public class WebsocketClient extends WebSocketListener {
     }
 
     @Override
-    @SneakyThrows
+    @SneakyThrows(JsonProcessingException.class)
     public void onMessage(@NotNull WebSocket socket, @NotNull String text) {
         logger.debug("Raw message received: {}", text);
         // Deserialise the payload from JSON into a java Object
@@ -206,7 +207,8 @@ public class WebsocketClient extends WebSocketListener {
             // Schedule the heartbeat to be sent at the given interval
             heartbeatFuture = scheduler.scheduleAtFixedRate(
                     new HeartbeatRunnable(socket, expectingAck),
-                    (int) (new Random().nextFloat() * heartbeatInterval), heartbeatInterval, TimeUnit.MILLISECONDS
+                    Math.min((int) (new Random().nextFloat() * heartbeatInterval), (int) (0.1 * heartbeatInterval)),
+                    heartbeatInterval, TimeUnit.MILLISECONDS
             );
         } else if (parsedPayload.getOpcode().equals(Opcode.HEARTBEAT_ACK)) {
             // Set the ACK flag to false - we are no longer expecting a heartbeat acknowledgement
