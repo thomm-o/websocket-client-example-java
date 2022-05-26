@@ -13,14 +13,14 @@ Ensure that you have Java 11 installed before attempting to run the example.
 Once you have cloned this repository locally, you can run the below command in
 order to compile the source code with dependencies.
 
-```
+```shell
 $ ./mvnw clean package
 ```
 
 Once this step has completed, and you have set the `DEVELOPER_ID` and `API_KEY` environment variables
 to contain your developer ID and API Key then you can execute the below command in order to run the example:
 
-```
+```shell
 $ java -jar target/app-jar-with-dependencies.jar
 ```
 
