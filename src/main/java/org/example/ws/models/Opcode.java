@@ -2,6 +2,9 @@ package org.example.ws.models;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * Websocket payload opcodes enum.
+ */
 public enum Opcode {
     HEARTBEAT(0),
     HEARTBEAT_ACK(1),
