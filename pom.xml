@@ -67,6 +67,7 @@
                             <mainClass>org.example.ws.App</mainClass>
                         </manifest>
                     </archive>
+                    <finalName>app</finalName>
                 </configuration>
             </plugin>
         </plugins>
